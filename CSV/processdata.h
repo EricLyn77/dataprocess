@@ -23,6 +23,8 @@ public:
 	getfiles F1;
 	tm initial_time;
 	tm t1;
+	int hourindex[44] = { 0,0,1,1,10,10,11,11,12,12,13,13,14,14,15,15,16,16,17,17,18,18,19,19,2,2,20,20,21,21,3,3,4,4,5,5,6,6,7,7,8,8,9,9 };
+	int minindex[44] = {0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30 };
 
 
 	void average(string DATA_DIR, vector<string> &files)
@@ -46,7 +48,7 @@ public:
 			string azimuth;
 			double sum = 0;
 			double averagevalue;
-			string preframe = "0";
+			string preframe = "45";
 			int n = 0;
 			string lineStr;
 			t1.tm_hour = initial_time.tm_hour;
@@ -72,7 +74,7 @@ public:
 				n++;
 				if (lineArray[14] != preframe)
 				{
-					t1.tm_min = t1.tm_min + 30;
+					/*t1.tm_min = t1.tm_min + 30;
 					if ((t1.tm_min >= 0) && (t1.tm_min < 31))
 					{
 						t1.tm_min = 30;
@@ -81,7 +83,9 @@ public:
 					{
 						t1.tm_min = 0;
 						t1.tm_hour++;
-					}
+					}*/
+					t1.tm_hour = hourindex[stoi(lineArray[14])];
+					t1.tm_min = minindex[stoi(lineArray[14])];
 					Average.push_back(to_string(sum / n));
 					Average.push_back(to_string(t1.tm_hour)+":"+to_string(t1.tm_min)+";"+to_string(t1.tm_sec));
 					Average_t.push_back(Average);
@@ -118,8 +122,10 @@ public:
 		strArray32.reserve(10000000);
 		F1.getFiles(DATA_DIR, files);
 		string lineStr;
+		int b = 0;
 		for (size_t i = 0; i < files.size(); i++)
 		{
+			b++;
 			long a = 0;
 	//		ifstream inFileAxx(axx, ios::in);
 			ifstream inFile(files[i], ios::in);
@@ -128,7 +134,7 @@ public:
 			vector<string> lineArray;
 			lineArray.reserve(10000);
 			long double standard;
-			int standard_indensity;
+			int standard_indensity=0;
 			string laser_id;
 			string azimuth;
 			string preframe="0";
@@ -163,7 +169,7 @@ public:
 					{
 						initial_time.tm_min = 0;
 					}
-				if (lineArray[14]!=preframe)
+/*				if (lineArray[14]!=preframe)
 				{
 
 					if ((t1.tm_min >= 0) && (t1.tm_min < 31))
@@ -176,11 +182,13 @@ public:
 						t1.tm_hour ++;
 					}
 
-				}
+				}*/
+				t1.tm_hour = hourindex[stoi(lineArray[14])];
+				t1.tm_min = minindex[stoi(lineArray[14])];
 				t1.tm_sec = initial_time.tm_sec + (stoi(lineArray[13]) / 10);
 				if (t1.tm_sec > 59)
 				{
-					t1.tm_min = initial_time.tm_min + (t1.tm_sec / 60);
+					t1.tm_min = t1.tm_min + (t1.tm_sec / 60);
 					t1.tm_sec = t1.tm_sec % 60;
 				}
 
