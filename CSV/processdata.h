@@ -23,9 +23,102 @@ public:
 	getfiles F1;
 	tm initial_time;
 	tm t1;
-	int hourindex[44] = { 0,0,1,1,10,10,11,11,12,12,13,13,14,14,15,15,16,16,17,17,18,18,19,19,2,2,20,20,21,21,3,3,4,4,5,5,6,6,7,7,8,8,9,9 };
-	int minindex[44] = {0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30 };
+	int hourindex[45] = { 0,5,0,1,1,10,10,11,11,12,12,13,13,14,14,15,15,16,16,17,17,18,18,19,19,2,2,20,20,21,21,3,3,4,4,5,5,6,6,7,7,8,8,9,9 };
+	int minindex[45] = {0,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30 };
 
+	void highest(string DATA_DIR, vector<string> &files)
+	{
+		vector<vector<string>> strArray34;
+		vector<vector<string>> Highest_t;
+		strArray34.reserve(10000000);
+		F1.getFiles(DATA_DIR, files);
+		for (size_t i = 0; i < files.size(); i++)
+		{
+			long a = 0;
+			//	ifstream inFileAxx(axx, ios::in);
+			ifstream inFile(files[i], ios::in);
+			cout << "rest:  " << files.size() - i << endl;
+			cout << files[i] << endl;
+			vector<string> lineArray;
+			lineArray.reserve(100000);
+			long double standard;
+			int standard_indensity;
+			string laser_id;
+			string azimuth;
+			double sum = 0;
+			double Highestvalue;
+			string preframe = "45";
+			int n = 0;
+			string lineStr;
+			t1.tm_hour = initial_time.tm_hour;
+			t1.tm_min = initial_time.tm_min;
+			t1.tm_sec = initial_time.tm_sec;
+			//	while (getline(inFileAxx, lineStr))
+			while (getline(inFile, lineStr)) //getline来自sstream
+			{
+				a++;
+				//打印整行字符串
+			//	cout<<lineStr<<endl;
+				//存成二维表结构
+				stringstream ss(lineStr);//来自sstream
+				string str;
+				vector<string> lineArray;
+				vector<string>Highest;
+
+				//		cout << "3" << endl;
+				while (getline(ss, str, ','))
+					lineArray.push_back(str);//一行数据以vector保存
+				if (a == 1)
+				{
+					Highestvalue = stod(lineArray[6]);
+				}
+
+				laser_id = lineArray[4];
+				if (abs(stod(lineArray[6])) > abs(Highestvalue))
+				{
+					Highestvalue = stod(lineArray[6]);
+				}
+				if (lineArray[14] != preframe)
+				{
+					/*t1.tm_min = t1.tm_min + 30;
+					if ((t1.tm_min >= 0) && (t1.tm_min < 31))
+					{
+						t1.tm_min = 30;
+					}
+					else
+					{
+						t1.tm_min = 0;
+						t1.tm_hour++;
+					}*/
+					t1.tm_hour = hourindex[stoi(lineArray[14])];
+					t1.tm_min = minindex[stoi(lineArray[14])];
+					Highest.push_back(to_string(Highestvalue));
+					Highest.push_back(to_string(t1.tm_hour) + ":" + to_string(t1.tm_min) + ":" + to_string(t1.tm_sec));
+					Highest_t.push_back(Highest);
+					a = 0;
+
+				}
+				preframe = lineArray[14];
+				//			strArray33.push_back(lineArray);
+			}
+
+			cout << "cycle done" << endl;
+			string pathorigin0 = "D:\\study\\project\\LiDAR_CSV\\highest\\";
+			ofstream out0(pathorigin0.append(laser_id).append("highest").append(".csv"));
+			for (int i = 0; i < Highest_t.size(); i++)
+			{
+				for (int j = 0; j < Highest_t[i].size(); j++)
+				{
+					out0 << Highest_t[i][j] << ",";
+
+				}
+				out0 << endl;
+			}
+			cout << "laser:" << laser_id << "done" << endl;
+			Highest_t.clear();
+
+		}
+	}
 
 	void average(string DATA_DIR, vector<string> &files)
 	{
@@ -48,6 +141,7 @@ public:
 			string azimuth;
 			double sum = 0;
 			double averagevalue;
+
 			string preframe = "45";
 			int n = 0;
 			string lineStr;
@@ -64,11 +158,10 @@ public:
 				stringstream ss(lineStr);//来自sstream
 				string str;
 				vector<string> lineArray;
-
+				vector<string>Average;
 		//		cout << "3" << endl;
 				while (getline(ss, str, ','))
 					lineArray.push_back(str);//一行数据以vector保存
-				vector<string>Average;
 				laser_id = lineArray[4];
 				sum = sum + stod(lineArray[6]);
 				n++;
@@ -87,7 +180,7 @@ public:
 					t1.tm_hour = hourindex[stoi(lineArray[14])];
 					t1.tm_min = minindex[stoi(lineArray[14])];
 					Average.push_back(to_string(sum / n));
-					Average.push_back(to_string(t1.tm_hour)+":"+to_string(t1.tm_min)+";"+to_string(t1.tm_sec));
+					Average.push_back(to_string(t1.tm_hour)+":"+to_string(t1.tm_min)+":"+to_string(t1.tm_sec));
 					Average_t.push_back(Average);
 					sum = 0;
 					n = 0;
@@ -254,10 +347,214 @@ public:
 			strArray32.clear();
 
 		}
-
-
-
 	}
+	void AddTime(string DATA_DIR, vector<string> &files)
+	{
+		vector<vector<string>> strArray35;
+		strArray35.reserve(10000000);
+		F1.getFiles(DATA_DIR, files);
+		string lineStr;
+		int b = 0;
+		for (size_t i = 0; i < files.size(); i++)
+		{
+			b++;
+			long a = 0;
+			//		ifstream inFileAxx(axx, ios::in);
+			ifstream inFile(files[i], ios::in);
+			cout << "rest:  " << files.size() - i << endl;
+			cout << files[i] << endl;
+			vector<string> lineArray;
+			lineArray.reserve(10000);
+			long double standard;
+			int standard_indensity = 0;
+			string laser_id;
+			string azimuth;
+			string preframe = "0";
+			t1.tm_hour = initial_time.tm_hour;
+			t1.tm_min = initial_time.tm_min;
+			t1.tm_sec = initial_time.tm_sec;
+			//while(getline(inFileAxx,lineStr))
+			while (getline(inFile, lineStr)) //getline来自sstream
+			{
+				a++;
+				//打印整行字符串
+			//	cout<<lineStr<<endl;
+				//存成二维表结构
+				stringstream ss(lineStr);//来自sstream
+				string str;
+				vector<string> lineArray;
+
+
+				while (getline(ss, str, ','))
+					lineArray.push_back(str);//一行数据以vector保存
+				string hour;
+				string min;
+				string sec;
+				try
+				{
+					if (lineArray.size() == NULL)
+					{
+						cout << "wrong" << endl;
+						continue;
+					}
+					if (a == 1)
+					{
+						azimuth = lineArray[5];
+						laser_id = lineArray[4];
+						initial_time.tm_min = 0;
+					}
+					t1.tm_hour = hourindex[stoi(lineArray[14])];
+					t1.tm_min = minindex[stoi(lineArray[14])];
+					t1.tm_sec = initial_time.tm_sec + (stoi(lineArray[13]) / 10);
+					if (t1.tm_sec > 59)
+					{
+						t1.tm_min = t1.tm_min + (t1.tm_sec / 60);
+						t1.tm_sec = t1.tm_sec % 60;
+					}
+
+					hour = to_string(t1.tm_hour);
+					min = to_string(t1.tm_min);
+					sec = to_string(t1.tm_sec);
+					lineArray.push_back(hour + ":" + min + ":" + sec);
+					preframe = lineArray[14];
+					if (stod(lineArray[6]) != 0)
+						strArray35.push_back(lineArray);
+
+				}
+				catch (const std::exception&)
+				{
+					//cout << "1" << endl;
+					continue;
+
+				}
+
+			}
+			cout << "cycle done" << endl;
+			string pathorigin0 = "D:\\study\\project\\LiDAR_CSV\\realtime\\";
+			ofstream out0(pathorigin0.append(laser_id).append(azimuth).append("realtime").append(".csv"));
+			for (int i = 0; i < strArray35.size(); i++)
+			{
+				for (int j = 0; j < strArray35[i].size(); j++)
+				{
+					out0 << strArray35[i][j] << ",";
+
+				}
+				out0 << endl;
+			}
+			cout << "laser:" << laser_id << "done" << endl;
+			strArray35.clear();
+
+		}
+	}
+
+	void Frequency(string DATA_DIR, vector<string> &files)
+	{
+		F1.getFiles(DATA_DIR, files);
+		vector<vector<double>> strArray36;
+
+		string azimuth;
+		for (int i = 0; i < files.size(); i++)
+		{
+			cout << files[i] << endl;
+			int a = 0;
+			int c = 0;
+			ifstream inFile(files[i], ios::in);
+			string lineStr;
+			string laser_id;
+			vector<double>distance;
+			vector<int> times;
+			vector<double>frequency;
+			frequency.reserve(20000);
+			distance.reserve(20000);
+			times.reserve(20000);
+			while (getline(inFile, lineStr))
+			{
+				a++;
+				stringstream ss(lineStr);//来自sstream
+				string str;
+				vector<string> lineArray;
+				lineArray.reserve(2000);
+
+				//按照逗号分隔
+				while (getline(ss, str, ','))
+					lineArray.push_back(str);
+				if (lineArray.size() == NULL)
+				{
+				//	cout << "wrong" << endl;
+					continue;
+				}
+			//	cout << stod(lineArray[6]) << endl;
+				if (a == 1)
+				{
+					laser_id = lineArray[4];
+					azimuth = lineArray[5];
+					distance.push_back(stod(lineArray[6]));
+				}
+				if(a>2)
+				{
+					for (int i = 0; i < distance.size(); i++)
+					{
+						try
+						{
+							if (stod(lineArray[6]) != 0)
+							{
+								c++;
+								if (stod(lineArray[6]) == distance[i])
+								{
+									//	cout << "1" << endl;
+									times[i] = times[i] + 1;;
+									//	cout << times[i] << endl;
+									break;
+								}
+								if (i == distance.size() - 1)
+								{
+									distance.push_back(stod(lineArray[6]));
+								}
+							}
+	
+
+						}
+						catch (const std::exception&)
+						{
+							continue;
+						}
+					}
+				}
+				
+			}
+			for (int i = 0; i < distance.size(); i++)
+			{
+				frequency.push_back((double(times[i]) /double(c)));
+			}
+			strArray36.push_back(distance);
+			strArray36.push_back(frequency);
+			string pathorigin0 = "D:\\study\\project\\LiDAR_CSV\\frequency\\";
+			ofstream out0(pathorigin0.append(laser_id).append(azimuth).append("frequency").append(".csv"));
+			for (int i = 0; i < strArray36.size(); i++)
+			{
+				for (int j = 0; j < strArray36[i].size(); j++)
+				{
+					out0 << strArray36[i][j] << ",";
+
+				}
+				out0 << endl;
+			}
+			cout << "laser:" << laser_id << "done" << endl;
+			try
+			{
+				vector<vector<double>>().swap(strArray36);
+				vector<int>().swap(times);
+				vector<double>().swap(frequency);
+				vector<double>().swap(distance);
+			}
+			catch (const std::exception&)
+			{	
+				cout << "wrong" << endl;
+				continue;
+			}	
+		}
+	}
+
 	void dataprocess(long initial_realtime,string azimuth,string DATA_DIR,vector<string> &files)
 	{
 		F1.getFiles(DATA_DIR, files);

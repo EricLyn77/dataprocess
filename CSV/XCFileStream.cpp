@@ -77,20 +77,31 @@ int main()
 	cout << P1.initial_time.tm_hour << endl;
 	P1.offset(DATA_DIR,files);*/
 
-	string DATA_DIR = "D:\\study\\project\\LiDAR_CSV\\offset";
+	/*string DATA_DIR = "D:\\study\\project\\LiDAR_CSV\\result(4700)";
 	vector<string> files;
 	getfiles F1;
 	processdata P1;
-	cout << "initial time_sec:";
-	cin >> P1.initial_time.tm_sec;
-	cout << P1.initial_time.tm_sec << endl;
-	cout << "initial time_min:";
-	cin >> P1.initial_time.tm_min;
-	cout << P1.initial_time.tm_min << endl;
-	cout << "initial time_hour:";
-	cin >> P1.initial_time.tm_hour;
-	cout << P1.initial_time.tm_hour << endl;
-	P1.average(DATA_DIR, files);
+	P1.AddTime(DATA_DIR, files);*/
+
+	string DATA_DIR = "D:\\study\\project\\LiDAR_CSV\\realtime";
+	vector<string> files;
+	getfiles F1;
+	processdata P1;
+	P1.Frequency(DATA_DIR, files);
+
+	/*string DATA_DIR = "D:\\study\\project\\LiDAR_CSV\\offset";
+	vector<string> files;
+	getfiles F1;
+	processdata P1;
+	P1.average(DATA_DIR, files);*/
+
+
+
+/*	string DATA_DIR = "D:\\study\\project\\LiDAR_CSV\\offset";
+	vector<string> files;
+	getfiles F1;
+	processdata P1;
+	P1.highest(DATA_DIR, files);*/
 }
 
 
