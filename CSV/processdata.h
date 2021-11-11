@@ -23,8 +23,8 @@ public:
 	getfiles F1;
 	tm initial_time;
 	tm t1;
-	int hourindex[45] = { 0,5,0,1,1,10,10,11,11,12,12,13,13,14,14,15,15,16,16,17,17,18,18,19,19,2,2,20,20,21,21,3,3,4,4,5,5,6,6,7,7,8,8,9,9 };
-	int minindex[45] = {0,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30 };
+	int hourindex[44] = { 0,0,1,1,10,10,11,12,12,13,13,14,14,15,15,16,16,17,17,18,18,19,19,2,2,20,20,21,21,22,3,3,4,4,5,5,6,6,7,7,8,8,9,9};
+	int minindex[44] = {0,30,0,30,0,30,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,30,0,0,30,0,30,0,30,0,30,0,30,0,30,0,30 };
 
 	void highest(string DATA_DIR, vector<string> &files)
 	{
@@ -258,48 +258,7 @@ public:
 						cout << "wrong" << endl;
 						continue;
 					}
-					if (a == 1)
-					{
-						initial_time.tm_min = 0;
-					}
-/*				if (lineArray[14]!=preframe)
-				{
-
-					if ((t1.tm_min >= 0) && (t1.tm_min < 31))
-					{
-						initial_time.tm_min = 30;
-					}
-					else
-					{
-						initial_time.tm_min = 0;
-						t1.tm_hour ++;
-					}
-
-				}*/
-				t1.tm_hour = hourindex[stoi(lineArray[14])];
-				t1.tm_min = minindex[stoi(lineArray[14])];
-				t1.tm_sec = initial_time.tm_sec + (stoi(lineArray[13]) / 10);
-				if (t1.tm_sec > 59)
-				{
-					t1.tm_min = t1.tm_min + (t1.tm_sec / 60);
-					t1.tm_sec = t1.tm_sec % 60;
-				}
-
-				hour = to_string(t1.tm_hour);
-				min = to_string(t1.tm_min);
-				sec = to_string(t1.tm_sec);
-				lineArray.push_back(hour + ":" + min + ":" + sec);
-
-							//	cout << to_string(t1.tm_hour) << endl;
-
-						
-						
-				preframe = lineArray[14];
-				//cout <<lineArray[0]<<endl;
-				//system("pause");
-
-
-					if (a == 1)
+					if (a == 2)
 					{
 
 					//	cout << "2" << endl;
@@ -311,17 +270,18 @@ public:
 					}
 					//			cout << lineArray[3]<<endl;
 					//cout << abs(stoi(lineArray[0]) - standard_indensity) << endl;
-					if (abs(stoi(lineArray[3])-standard_indensity)<3)
-					{
+				//	if (abs(stoi(lineArray[3])-standard_indensity)<3)
+				//	{
 			//			cout << "1" << endl;
 					//	cout << lineArray[3] << endl;
-						lineArray[6] = to_string(standard - stod(lineArray[6]));
+						lineArray[6] = to_string(((stod(lineArray[6])-standard)/standard)/standard
+						);
 					//	cout << lineArray[3] << endl;
 						strArray32.push_back(lineArray);
 					//	lineArray.clear();
 					//	cout << a << endl;
 
-					}
+					//}
 				}
 				catch (const std::exception&)
 				{
@@ -332,8 +292,8 @@ public:
 
 			}
 			cout << "cycle done" << endl;
-			string pathorigin0 = "D:\\study\\project\\LiDAR_CSV\\\offset\\";
-			ofstream out0(pathorigin0.append(laser_id).append("offset").append(".csv"));
+			string pathorigin0 = "D:\\study\\project\\LiDAR_CSV\\2019-4-11\\offset\\";
+			ofstream out0(pathorigin0.append(laser_id).append(azimuth).append("offset").append(".csv"));
 			for (int i = 0; i < strArray32.size(); i++)
 			{
 				for (int j = 0; j < strArray32[i].size(); j++)
@@ -430,7 +390,7 @@ public:
 
 			}
 			cout << "cycle done" << endl;
-			string pathorigin0 = "D:\\study\\project\\LiDAR_CSV\\realtime\\";
+			string pathorigin0 = "D:\\study\\project\\LiDAR_CSV\\\\2019-4-11\\realtime\\";
 			ofstream out0(pathorigin0.append(laser_id).append(azimuth).append("realtime").append(".csv"));
 			for (int i = 0; i < strArray35.size(); i++)
 			{
