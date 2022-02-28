@@ -7,6 +7,7 @@
 #include<io.h>
 #include "getfiles.h"
 #include "processdata.h"
+#include "Dreceiver.h"
 
 //using namespace std;
 
@@ -451,11 +452,14 @@ int main()
 
 
 	
-	string DATA_DIR = "D:\\7.14 50degree\\result";
+/*	string DATA_DIR = "D:\\7.14 50degree\\result";
 	vector<string> files;
 	getfiles F1;
 	processdata P1;
-	P1.offset(DATA_DIR,files);
+	P1.offset(DATA_DIR,files);*/
+DReceiver D1;
+D1.hasGroundFile = false;
+D1.DReceiverStart();
 
 }
 

@@ -98,9 +98,9 @@ int main()
 	P1.highest(DATA_DIR, files);*/
 
 
-	string DATA_DIR = "D:\\study\\project\\pcaptest";
+	string DATA_DIR = "D:\\2019-4-15";
 	PcapToCSV P1;
-	P1.dataconvert(const_cast<char *>(DATA_DIR.c_str()));
+	P1.dataconvert(const_cast<char *>(DATA_DIR.c_str()),35210);
 
 
 	

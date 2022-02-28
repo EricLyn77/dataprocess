@@ -24,9 +24,21 @@
     <ClInclude Include="getfiles.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="GroundZ.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DReceiver.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="XCFileStream.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GroundZ.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DReceiver.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

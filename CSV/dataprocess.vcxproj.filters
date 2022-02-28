@@ -18,6 +18,9 @@
     <ClCompile Include="XCFileStream.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PcapToCSV.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="getfiles.h">
@@ -27,6 +30,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="XCFileStream.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PcapToCSV.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
