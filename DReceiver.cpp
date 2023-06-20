@@ -1,11 +1,7 @@
-#include <fstream>
-#include <iostream>
-#include <iomanip>
+﻿
 #include "DReceiver.h"
-#include "pcap.h"
 #include"GroundZ.h"
-#include <string>
-#include<utility>
+
 
 
 
@@ -94,9 +90,10 @@ void DReceiver::DReceiverStart()
 			}
 		}
 	}*/
-	string GroundFile = "G:\\wildhorse\\ground1.csv";
+	string GroundFile = "realground.csv";
 	fstream groundfile(GroundFile);
 	string groundstring;
+	//getline(groundfile, groundstring, '\n');
 	for (int i = 0; i < 120; i++)
 	{
 		//getline(groundFile, groundstring,',');
@@ -106,18 +103,18 @@ void DReceiver::DReceiverStart()
 		for (int j = 0; j < 200; j++)
 		{
 			//Area1->groundZvalue[i][j] = groundstring[j];
-			getline(groundfile, groundstring, ',');
+			getline(groundfile, groundstring,',');
 			cout << groundstring<<endl;
 			Z1.groundZvalue[i][j] = stof(groundstring);
-			//cout << "x: " << j << " y: " << i << " value: " << Z1.groundZvalue[i][j] << endl;
+			cout << "x: " << j << " y: " << i << " value: " << Z1.groundZvalue[i][j] << endl;
 		}
 		getline(groundfile, groundstring, '\n');
 		//system("pause");
 	}
-	ofstream out00("G:\\wildhorse\\ground3.csv", ios::ate | ios::out);
-	ofstream out01("G:\\wildhorse\\ground5.csv", ios::ate | ios::out);
-	string directory = "G:/wildhorse/";
-	string filename = "2021-6-29-2-0-0.pcap";
+	ofstream out00("ground6.csv", ios::ate | ios::out);
+	ofstream out01("ground7.csv", ios::ate | ios::out);
+	string directory = "G:/";
+	string filename = "2022-5-26-2-30-0.pcap";
 	string fileNameIn = directory + filename;
 	string outputFilename(fileNameIn);
 	const char* infilenameC = outputFilename.c_str();// "E:/GREENVALLEY/2019-6-25-7-0-0.pcap";
@@ -128,7 +125,7 @@ void DReceiver::DReceiverStart()
 	}
 
 	pcap_setbuff(fp, 256 * 1024 * 1024);
-	pcap_setuserbuffer(fp, 1 * 1024 * 1024 * 1024);
+	//pcap_setuserbuffer(fp, 1 * 1024 * 1024 * 1024);
 
 	int nt = 0;
 	int tempint = 0;
@@ -324,7 +321,12 @@ void DReceiver::DReceiverStart()
 													{
 														for (int j = 0; j < 200; j++)
 														{
-															Z1.aroundValue[i][j] = -300;
+															if (Z1.groundZvalue[i][j] != 200)
+															{
+																Z1.aroundValue[i][j] = -300;
+															}
+
+															
 														}
 
 													}
@@ -351,7 +353,7 @@ void DReceiver::DReceiverStart()
 																	}
 																}*/
 															}
-															else
+															else if(Z1.groundZvalue[i][j] != 200)
 															{
 																Z1.groundZvalue[i][j] = Z1.percentile_95(Z1.arrayFlow[i * 200 + j]);
 															}
@@ -553,3 +555,147 @@ void DReceiver::pointHigherThanGround(double x, double y, double z)
 
 	}
 }
+
+void DReceiver::BackgroundFileSeparate(string DATA_DIR, vector<string> &files)
+{
+	F1.getFiles(DATA_DIR,files);
+	for (int i = 0; i < files.size(); i++)
+	{
+		cout << files[i] << endl;
+		ifstream BackFile(files[i]);
+		int pos = files[i].find_last_of(".");
+		int pos1 = files[i].find_last_of("\\");
+		string datename(files[i].substr(pos1 + 1, pos - pos1 - 1));
+		string filterDirBac = DATA_DIR +"\\"+ "back"+datename + ".csv";
+		string filterDirObj = DATA_DIR +"\\"+ "obj"+datename + ".csv";
+		ofstream BackFileBac(filterDirBac, ios::out | ios::app);
+		ofstream BackFileObject(filterDirObj, ios::out | ios::app);
+		
+		
+		while (!BackFile.eof())
+		{
+			try
+			{
+				string str2;
+				getline(BackFile, str2, '\n');
+				stringstream ss(str2);
+				double X, Y, Z;
+				int clas;
+				for (int j = 0; j < 4; j++)
+				{
+
+					string str1;
+					switch (j)
+					{
+					case 0:
+						getline(ss, str1, ',');
+						X = stod(str1);
+						break;
+					case 1:
+						getline(ss, str1, ',');
+						Y = stod(str1);
+						break;
+					case 2:
+						getline(ss, str1, ',');
+						Z = stod(str1);
+						break;
+					case 3:
+						getline(ss, str1, '\n');
+						clas = stoi(str1);
+						break;
+					}
+
+				}
+				//getline(BackFile, str1, '\n');
+				if (clas == 1)
+				{
+					BackFileBac << X << "," << Y << "," << Z << endl;
+				}
+				if (clas == 2)
+				{
+					BackFileObject << X << "," << Y << "," << Z << endl;
+				}
+			}
+			catch (const std::exception&)
+			{
+				continue;
+			}
+			
+		}
+	}
+
+}
+
+/*void DReceiver::CSVtoPCD()
+{
+//#include "pch.h"
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <vector>
+
+
+	using namespace std;
+
+	typedef struct tagPOINT_3D
+	{
+		double x;  //mm world coordinate x
+		double y;  //mm world coordinate y
+		double z;  //mm world coordinate z
+		double i;
+	}POINT_WORLD;
+
+		vector<tagPOINT_3D> my_csvPoints;
+		tagPOINT_3D csvPoint;
+
+
+
+		ifstream fin("onezhen.csv");
+		string line;
+		int i = 0;
+		while (getline(fin, line))
+		{
+			//cout << "原始字符串：" << line << endl; //整行输出
+			istringstream sin(line);
+			vector<string> fields;
+			string field;
+			while (getline(sin, field, ','))
+			{
+				fields.push_back(field);
+			}
+			if (i != 0) {
+				csvPoint.x = atof(fields[3].c_str());
+				csvPoint.y = atof(fields[4].c_str());
+				csvPoint.z = atof(fields[5].c_str());
+				csvPoint.i = atof(fields[6].c_str());
+				//cout << "处理之后的字符串：" << csvPoint.x << "\t" << csvPoint.y << "\t" << csvPoint.z << "\t" << csvPoint.i << endl;
+				my_csvPoints.push_back(csvPoint);
+			}
+			else
+				i++;
+		}
+		//cout << my_csvPoints.size() << endl;
+		int number_Txt = my_csvPoints.size();
+
+		pcl::PointCloud<pcl::PointXYZI> cloud;
+		// Fill in the cloud data
+		cloud.width = number_Txt;
+		cloud.height = 1;
+		cloud.is_dense = false;
+		cloud.points.resize(cloud.width * cloud.height);
+
+		for (size_t i = 0; i < cloud.points.size(); ++i)
+		{
+			cloud.points[i].x = my_csvPoints[i].x;
+			cloud.points[i].y = my_csvPoints[i].y;
+			cloud.points[i].z = my_csvPoints[i].z;
+			cloud.points[i].intensity = my_csvPoints[i].i;
+		}
+		pcl::io::savePCDFileASCII("mydata.pcd", cloud);
+		std::cerr << "Saved " << cloud.points.size() << " data points to txt2pcd.pcd." << std::endl;
+
+	
+
+
+}*/

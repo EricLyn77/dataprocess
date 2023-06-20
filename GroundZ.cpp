@@ -4,7 +4,7 @@
 void groundZ::highestZ(double x, double y, double z)
 {
 	int xIndex = (int)(x + 100);
-	int yIndex = ceil(119-(y + 40));
+	int yIndex = ceil(119-(y + 80));
 	//cout << xIndex <<"    "<< yIndex<<endl;
 	if (xIndex < 200 && xIndex >= 0 && yIndex < 120 && yIndex >= 0&&z>groundZvalue[yIndex][xIndex]&&z<3)
 	{

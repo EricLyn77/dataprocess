@@ -30,7 +30,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{13FD2187-4302-4752-A7A2-BC7EBDF40B57}</ProjectGuid>
     <RootNamespace>CSV</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -87,6 +87,18 @@
     <IncludePath>C:\Users\tyuan\source\repos\dataprocess\CSV\WpdPack\Include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\tyuan\source\repos\dataprocess\CSV\WpdPack\Lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>C:\Users\CATERITS\Desktop\dataprocess\WpdPack\Include\pcap;C:\Users\CATERITS\Desktop\dataprocess\WpdPack\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\CATERITS\Desktop\dataprocess\WpdPack\Lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>C:\Users\CATERITS\Desktop\dataprocess\WpdPack\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\CATERITS\Desktop\dataprocess\WpdPack\Lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>C:\Users\CATERITS\Desktop\dataprocess\WpdPack\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\CATERITS\Desktop\dataprocess\WpdPack\Lib\x64;C:\Users\CATERITS\Desktop\dataprocess\WpdPack\Lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -106,9 +118,11 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <PreprocessorDefinitions>XKEYCHECK_H;HAVE_REMOTE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
+      <AdditionalDependencies>wpcap.lib;Packet.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -134,11 +148,13 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <PreprocessorDefinitions>XKEYCHECK_H;HAVE_REMOT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>wpcap.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -151,6 +167,7 @@
   <ItemGroup>
     <ClCompile Include="DReceiver.cpp" />
     <ClCompile Include="GroundZ.cpp" />
+    <ClCompile Include="processdata.cpp" />
     <ClCompile Include="XCFileStream.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

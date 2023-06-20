@@ -52,6 +52,8 @@ public:
 	vector<vector<string>> strArray30;
 	vector<vector<string>> strArray31;
 
+	void caculateRate(string filePath, vector<string> &files);
+
 	void offset(string DATA_DIR, vector<string> &files)
 	{
 		vector<vector<string>> strArray32;

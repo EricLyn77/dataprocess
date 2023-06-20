@@ -2,15 +2,23 @@
 
 #define WIN32  
 
-#include"pcap.h"
-#include<string>
 #include <iostream>
+#include<filesystem>
+#include <fstream>
+#include<sstream>
+#include<string>
+#include <iomanip>
+#include"pcap.h"
+//#include <pcl/io/pcd_io.h>
+//#include <pcl/point_types.h>
 #include <map>
 #include<utility>
 #include "GroundZ.h"
-#include<sstream>
-#include<filesystem>
 #include<io.h>
+
+#include"getfiles.h"
+
+
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
@@ -37,10 +45,13 @@ class DReceiver
 public:
 
 	groundZ Z1;
+	getfiles F1;
 	bool hasGroundFile = false;
 
 	void DReceiverStart();
 	void pointHigherThanGround(double x, double y, double z);
+	void BackgroundFileSeparate(string DATA_DIR, vector<string> &files);
+	void CSVtoPCD();
 
 
 private:

@@ -45,6 +45,11 @@ public:
 			} while (_findnext(hFile, &fileinfo) == 0);
 			_findclose(hFile);
 		}
-		cout << files[1] << endl;
+		for (int i = 0; i < files.size(); i++)
+		{
+			cout << files[i] << endl;
+		}
+		system("pause");
+		
 	}
 };

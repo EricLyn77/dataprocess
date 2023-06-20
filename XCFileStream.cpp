@@ -457,9 +457,16 @@ int main()
 	getfiles F1;
 	processdata P1;
 	P1.offset(DATA_DIR,files);*/
-DReceiver D1;
+/*DReceiver D1;
 D1.hasGroundFile = false;
-D1.DReceiverStart();
+D1.DReceiverStart();  */   
+
+DReceiver D1;
+vector<string> files;
+D1.BackgroundFileSeparate("F:\\2022-4-25_pedestrain", files);
+/*processdata P1;
+vector<string> files;
+P1.caculateRate("E:\\updatebackground", files);*/
 
 }
 
